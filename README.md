@@ -28,19 +28,17 @@ Here the values that need to be replaced is everything insite and including the 
 The second half of the `<<...|...>>` gives an example for using the script in a Gitlab CICD pipeline.
 
 ```cmd
-GDQS_ENDPOINT_URL=<<URL to the qraphql api|"$CI_SERVER_URL/api/graphql">>
-GDQS_BEARER_TOKEN=<<Authorization token that grants access|"$GITLAB_API_ACCESS_TOKEN">> #(For Gitlab bind a custom secret-CICD-variable with a token with api-read access to $GITLAB_API_ACCESS_TOKEN or any other variable name of your chosing)
-GDQS_JQ_OUTPUT_FILTER=<<Filter to let jq filter out unnecessary parts of the output|".[][][][].nodes">>
+export GDQS_ENDPOINT_URL=<<URL to the qraphql api|"$CI_SERVER_URL/api/graphql">>
+export GDQS_BEARER_TOKEN=<<Authorization token that grants access|"$GITLAB_API_ACCESS_TOKEN">> #(For Gitlab bind a custom secret-CICD-variable with a token with api-read access to $GITLAB_API_ACCESS_TOKEN or any other variable name of your chosing)
+export GDQS_JQ_OUTPUT_FILTER=<<Filter to let jq filter out unnecessary parts of the output|".[][][][].nodes">>
 ```
-
-The script will output the queried json string into `$GDQS_FINAL_OUTPUT`
 
 ## Non-paginated Output
 
 ```cmd
-GDQS_GRAPHQL_QUERY_STRING=<<The Query that gets sent to the endpoint|"{\"query\": \"query{project(fullPath:\\\"$CI_PROJECT_PATH\\\"){mergeRequest(iid:\\\"$CI_MERGE_REQUEST_IID\\\"){commits{nodes{shortId,fullTitle}}}}}\"}">>
-GDQS_JQ_END_CURSOR_FILTER="" # Explained below, not needed in this case
-GDQS_JQ_HAS_NEXT_PAGE_FILTER="" # Explained below, not needed in this case
+export GDQS_GRAPHQL_QUERY_STRING=<<The Query that gets sent to the endpoint|"{\"query\": \"query{project(fullPath:\\\"$CI_PROJECT_PATH\\\"){mergeRequest(iid:\\\"$CI_MERGE_REQUEST_IID\\\"){commits{nodes{shortId,fullTitle}}}}}\"}">>
+export GDQS_JQ_END_CURSOR_FILTER="" # Explained below, not needed in this case
+export GDQS_JQ_HAS_NEXT_PAGE_FILTER="" # Explained below, not needed in this case
 ```
 
 ## Paginated Output
@@ -50,9 +48,9 @@ In the Query string, this variable needs to be escaped, so it can be inserted ev
 The other variables in the example can be evaluated the first time, because they are known from the beginning and do not change.
 
 ```cmd
-GDQS_GRAPHQL_QUERY_STRING=<<Query with the $GDQS_CURRENT_AFTER_VALUE at the right place|"{\"query\": \"query{project(fullPath:\\\"$CI_PROJECT_PATH\\\"){mergeRequest(iid:\\\"$CI_MERGE_REQUEST_IID\\\"){commits(after:\\\"$GDQS_CURRENT_AFTER_VALUE\\\"){nodes{shortId,fullTitle}}}}}\"}">>
-GDQS_JQ_END_CURSOR_FILTER=<<jq instruction to parse the endCursor variable from the curl output|".[][][][].pageInfo.endCursor">>
-GDQS_JQ_HAS_NEXT_PAGE_FILTER=<<jq instruction to parse the hasNextPage variable from the curl output|".[][][][].pageInfo.hasNextPage">>
+export GDQS_GRAPHQL_QUERY_STRING=<<Query with the $GDQS_CURRENT_AFTER_VALUE at the right place|"{\"query\": \"query{project(fullPath:\\\"$CI_PROJECT_PATH\\\"){mergeRequest(iid:\\\"$CI_MERGE_REQUEST_IID\\\"){commits(after:\\\"$GDQS_CURRENT_AFTER_VALUE\\\"){nodes{shortId,fullTitle}}}}}\"}">>
+export GDQS_JQ_END_CURSOR_FILTER=<<jq instruction to parse the endCursor variable from the curl output|".[][][][].pageInfo.endCursor">>
+export GDQS_JQ_HAS_NEXT_PAGE_FILTER=<<jq instruction to parse the hasNextPage variable from the curl output|".[][][][].pageInfo.hasNextPage">>
 ```
 
 ## Example JSON for the jq-play editor for the Gitlab example
