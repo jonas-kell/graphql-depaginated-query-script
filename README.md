@@ -44,11 +44,11 @@ export GDQS_JQ_HAS_NEXT_PAGE_FILTER="false" # Explained below should always retu
 ## Paginated Output
 
 A loop will iterate over the queries while the `$GDQS_CURRENT_AFTER_VALUE` is set new every time.
-In the Query string, this variable needs to be escaped, so it can be inserted every iteration.
+In the query string, this variable needs to be escaped, so it can be inserted every iteration.
 The other variables in the example can be evaluated the first time, because they are known from the beginning and do not change.
 
 ```cmd
-export GDQS_GRAPHQL_QUERY_STRING=<<Query with the $GDQS_CURRENT_AFTER_VALUE at the right place|"{\"query\": \"query{project(fullPath:\\\"$CI_PROJECT_PATH\\\"){mergeRequest(iid:\\\"$CI_MERGE_REQUEST_IID\\\"){commits(after:\\\"$GDQS_CURRENT_AFTER_VALUE\\\"){nodes{shortId,fullTitle}}}}}\"}">>
+export GDQS_GRAPHQL_QUERY_STRING=<<Query with the $GDQS_CURRENT_AFTER_VALUE at the right place|"{\"query\": \"query{project(fullPath:\\\"$CI_PROJECT_PATH\\\"){mergeRequest(iid:\\\"$CI_MERGE_REQUEST_IID\\\"){commits(after:\\\"\$GDQS_CURRENT_AFTER_VALUE\\\"){nodes{shortId,fullTitle},pageInfo{endCursor,hasNextPage}}}}}\"}">>
 export GDQS_JQ_END_CURSOR_FILTER=<<jq instruction to parse the endCursor variable from the curl output|".[][][][].pageInfo.endCursor">>
 export GDQS_JQ_HAS_NEXT_PAGE_FILTER=<<jq instruction to parse the hasNextPage variable from the curl output|".[][][][].pageInfo.hasNextPage">>
 ```
