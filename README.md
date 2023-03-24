@@ -38,7 +38,7 @@ export GDQS_JQ_OUTPUT_FILTER=<<Filter to let jq filter out unnecessary parts of 
 ```cmd
 export GDQS_GRAPHQL_QUERY_STRING=<<The Query that gets sent to the endpoint|"{\"query\": \"query{project(fullPath:\\\"$CI_PROJECT_PATH\\\"){mergeRequest(iid:\\\"$CI_MERGE_REQUEST_IID\\\"){commits{nodes{shortId,fullTitle}}}}}\"}">>
 export GDQS_JQ_END_CURSOR_FILTER="" # Explained below, not needed in this case
-export GDQS_JQ_HAS_NEXT_PAGE_FILTER="" # Explained below, not needed in this case
+export GDQS_JQ_HAS_NEXT_PAGE_FILTER="false" # Explained below should always return false if no pagination is wanted
 ```
 
 ## Paginated Output
