@@ -20,6 +20,6 @@ while [ "$GDQS_CURRENT_HAS_NEXT_PAGE_VALUE" != "false" ]; do
     
     echo "GDQS appends the values to the output";
     GDQS_FINAL_OUTPUT=$(echo "[$GDQS_FINAL_OUTPUT,$GDQS_FILTERED_RESPONSE]" | jq -r "$GDQS_JQ_ARRAY_MERGER_FILTER");
-    echo "$GDQS_FINAL_OUTPUT";
 done
 
+echo "$GDQS_FINAL_OUTPUT";
